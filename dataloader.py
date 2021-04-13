@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class Gen_Data_loader():
+class Gen_Data_loader:
     def __init__(self, batch_size):
         self.batch_size = batch_size
         self.token_stream = []
@@ -10,8 +10,7 @@ class Gen_Data_loader():
         self.token_stream = []
         with open(data_file, 'r') as f:
             for line in f:
-                line = line.strip()
-                line = line.split()
+                line = line.strip().split()
                 parse_line = [int(x) for x in line]
                 if len(parse_line) == 20:
                     self.token_stream.append(parse_line)
@@ -30,7 +29,7 @@ class Gen_Data_loader():
         self.pointer = 0
 
 
-class Dis_dataloader():
+class Dis_dataloader:
     def __init__(self, batch_size):
         self.batch_size = batch_size
         self.sentences = np.array([])
@@ -38,18 +37,15 @@ class Dis_dataloader():
 
     def load_train_data(self, positive_file, negative_file):
         # Load data
-        positive_examples = []
-        negative_examples = []
+        positive_examples, negative_examples = [], []
         with open(positive_file)as fin:
             for line in fin:
-                line = line.strip()
-                line = line.split()
+                line = line.strip().split()
                 parse_line = [int(x) for x in line]
                 positive_examples.append(parse_line)
         with open(negative_file)as fin:
             for line in fin:
-                line = line.strip()
-                line = line.split()
+                line = line.strip().split()
                 parse_line = [int(x) for x in line]
                 if len(parse_line) == 20:
                     negative_examples.append(parse_line)
@@ -74,7 +70,6 @@ class Dis_dataloader():
 
         self.pointer = 0
 
-
     def next_batch(self):
         ret = self.sentences_batches[self.pointer], self.labels_batches[self.pointer]
         self.pointer = (self.pointer + 1) % self.num_batch
@@ -82,4 +77,3 @@ class Dis_dataloader():
 
     def reset_pointer(self):
         self.pointer = 0
-
