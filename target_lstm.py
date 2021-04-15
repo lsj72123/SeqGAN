@@ -33,10 +33,10 @@ class TARGET_LSTM(object):
         self.h0 = tf.stack([self.h0, self.h0])
 
         # generator on initial randomness
-        gen_o = tensor_array_ops.TensorArray(
-            dtype=tf.float32, size=self.sequence_length, dynamic_size=False, infer_shape=True)
-        gen_x = tensor_array_ops.TensorArray(
-            dtype=tf.int32, size=self.sequence_length, dynamic_size=False, infer_shape=True)
+        gen_o = tensor_array_ops.TensorArray(dtype=tf.float32, size=self.sequence_length,
+                                             dynamic_size=False, infer_shape=True)
+        gen_x = tensor_array_ops.TensorArray(dtype=tf.int32, size=self.sequence_length,
+                                             dynamic_size=False, infer_shape=True)
 
         def _g_recurrence(i, x_t, h_tm1, gen_o, gen_x):
             h_t = self.g_recurrent_unit(x_t, h_tm1)  # hidden_memory_tuple
@@ -91,7 +91,9 @@ class TARGET_LSTM(object):
                 -tf.reduce_sum(
                     tf.one_hot(tf.to_int32(tf.reshape(self.x, [-1])), self.num_emb, 1.0, 0.0) * tf.log(
                         tf.reshape(self.g_predictions, [-1, self.num_emb])), 1
-                ), [-1, self.sequence_length]), 1)  # batch_size
+                ), [-1, self.sequence_length]
+            ), 1
+        )  # batch_size
 
     def generate(self, session):
         # h0 = np.random.normal(size=self.hidden_dim)
@@ -100,7 +102,7 @@ class TARGET_LSTM(object):
 
     @staticmethod
     def init_matrix(shape):
-        return tf.random_normal(shape, stddev=1.0)
+        return tf.random.normal(shape, stddev=1.0)
 
     def create_recurrent_unit(self, params):
         # Weights and Bias for input and hidden tensor
